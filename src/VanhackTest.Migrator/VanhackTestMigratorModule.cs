@@ -19,7 +19,7 @@ namespace VanhackTest.Migrator
             abpProjectNameEntityFrameworkModule.SkipDbSeed = true;
 
             _appConfiguration = AppConfigurations.Get(
-                typeof(VanhackTestMigratorModule).GetAssembly().GetDirectoryPathOrNull()
+                typeof(VanhackTestMigratorModule).GetAssembly().GetDirectoryPathOrNull(), addUserSecrets : true
             );
         }
 

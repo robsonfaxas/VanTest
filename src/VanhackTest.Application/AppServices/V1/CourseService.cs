@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using VanhackTest.Core.Utils;
-using VanhackTest.Courses;
 
 namespace VanhackTest.AppServices.V1
 {
