@@ -12,6 +12,7 @@ namespace VanhackTest.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
         public DbSet<Course> Courses { get; set; }
+        public DbSet<CourseVideo> CourseVideos  { get; set; }
         public VanhackTestDbContext(DbContextOptions<VanhackTestDbContext> options)
             : base(options)
         {

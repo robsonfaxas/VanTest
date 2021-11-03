@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanhackTest.Authorization.Roles;
 using VanhackTest.Domain;
 
 namespace VanhackTest.Mappings
@@ -19,6 +20,14 @@ namespace VanhackTest.Mappings
 
             builder.Property(x => x.Description)
                 .IsRequired();
+
+            builder.Property(x => x.RoleId)
+                .IsRequired();
+
+            builder
+                .HasOne<Role>()
+                .WithMany()
+                .HasForeignKey(fk => fk.RoleId);            
 
         }
     }

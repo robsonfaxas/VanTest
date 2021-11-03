@@ -1554,6 +1554,9 @@ namespace VanhackTest.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -1561,7 +1564,54 @@ namespace VanhackTest.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("VanhackTest.Domain.CourseVideo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdCourse")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short>("Order")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdCourse");
+
+                    b.ToTable("CourseVideos");
                 });
 
             modelBuilder.Entity("VanhackTest.MultiTenancy.Tenant", b =>
@@ -1845,6 +1895,28 @@ namespace VanhackTest.Migrations
                     b.Navigation("LastModifierUser");
                 });
 
+            modelBuilder.Entity("VanhackTest.Domain.Course", b =>
+                {
+                    b.HasOne("VanhackTest.Authorization.Roles.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("VanhackTest.Domain.CourseVideo", b =>
+                {
+                    b.HasOne("VanhackTest.Domain.Course", "Course")
+                        .WithMany("Videos")
+                        .HasForeignKey("IdCourse")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("VanhackTest.MultiTenancy.Tenant", b =>
                 {
                     b.HasOne("VanhackTest.Authorization.Users.User", "CreatorUser")
@@ -1941,6 +2013,11 @@ namespace VanhackTest.Migrations
                     b.Navigation("Settings");
 
                     b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("VanhackTest.Domain.Course", b =>
+                {
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }

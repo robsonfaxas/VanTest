@@ -14,6 +14,7 @@ using VanhackTest.EntityFrameworkCore;
 using VanhackTest.EntityFrameworkCore.Seed.Host;
 using VanhackTest.EntityFrameworkCore.Seed.Tenants;
 using VanhackTest.MultiTenancy;
+using Xunit;
 
 namespace VanhackTest.Tests
 {
@@ -46,6 +47,19 @@ namespace VanhackTest.Tests
             });
 
             LoginAsDefaultTenantAdmin();
+        }
+
+
+
+        protected async void AssertException<T>(Action testCode, string expectedMessage)
+           where T : Exception
+           => await AssertExceptionAsync<T>(async () => await Task.Run(testCode), expectedMessage);
+
+        protected async Task AssertExceptionAsync<T>(Func<Task> testCode, string expectedMessage)
+            where T : Exception
+        {
+            var exception = await Assert.ThrowsAsync<T>(testCode);
+            Assert.Equal(expectedMessage, exception.GetBaseException().Message);
         }
 
         #region UsingDbContext
