@@ -65,5 +65,12 @@ namespace VanhackTest.Helpers
             }
             return list;
         }
+
+        internal void ValidateOrder(List<CourseVideo> allCourseVideos, CourseVideo courseVideo)
+        {
+            foreach(var course in allCourseVideos)
+                if(course.Order == courseVideo.Order && (course.Id != courseVideo.Id || courseVideo.Id == 0))
+                    throw new AbpAuthorizationException("Video order cannot be repeated");
+        }
     }
 }

@@ -57,6 +57,7 @@ namespace VanhackTest.AppServices.V1
         {
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, input.RoleId);
+
             var course = _mapper.Map<Course>(input);
             var courseId = _courseRepository.InsertAndGetId(course);
             course = _courseRepository.Get(courseId);
@@ -69,7 +70,11 @@ namespace VanhackTest.AppServices.V1
             var course = _courseRepository.Get(input.IdCourse);
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
             var courseVideo = _mapper.Map<CourseVideo>(input);
+            var allCourseVideos = GetVideosByCourseId(input.IdCourse);
+            base.ValidateOrder(allCourseVideos, courseVideo);
+
             var courseVideoId = _videoRepository.InsertAndGetId(courseVideo);
             courseVideo = _videoRepository.Get(courseVideoId);
             return _mapper.Map<CourseVideoDto>(courseVideo);
@@ -99,7 +104,11 @@ namespace VanhackTest.AppServices.V1
             var course = _courseRepository.Get(input.IdCourse);
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
+            var allCourseVideos = GetVideosByCourseId(input.IdCourse);            
             var courseVideo = _videoRepository.Get(input.Id);
+            base.ValidateOrder(allCourseVideos, _mapper.Map<CourseVideo>(input));
+
             courseVideo.Title = input.Title;
             courseVideo.Description = input.Description;
             courseVideo.IdCourse = input.IdCourse;
@@ -116,6 +125,7 @@ namespace VanhackTest.AppServices.V1
             var course = _courseRepository.Get(id);
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
             _courseRepository.Delete(id);
         }
 
@@ -126,6 +136,7 @@ namespace VanhackTest.AppServices.V1
             var course = _courseRepository.Get(courseVideo.IdCourse);
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
             _videoRepository.Delete(id);
         }
 
@@ -136,6 +147,7 @@ namespace VanhackTest.AppServices.V1
             course.Videos = GetVideosByCourseId(id);
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
             var result = _mapper.Map<CourseDto>(course);
             return result;
         }
@@ -147,6 +159,7 @@ namespace VanhackTest.AppServices.V1
             var course = _courseRepository.Get(courseVideo.Id);            
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user, course.RoleId);
+
             var result = _mapper.Map<CourseVideoDto>(courseVideo);            
             return result;
         }
@@ -156,6 +169,7 @@ namespace VanhackTest.AppServices.V1
         {
             User user = base.GetLoggedUserWithRoles();
             base.ValidateUserAccess(user);
+
             var courses = _courseRepository.GetAllList(p => user.Roles.Select(s => s.RoleId).Contains(p.RoleId));
             foreach(var course in courses)
                 course.Videos = GetVideosByCourseId(course.Id);
