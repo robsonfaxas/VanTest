@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Roles;
 using VanhackTest.Authorization.Users;
+using VanhackTest.Domain;
 
 namespace VanhackTest.Authorization.Roles
 {
